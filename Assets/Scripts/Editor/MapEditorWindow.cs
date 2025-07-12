@@ -239,6 +239,9 @@ public class MapEditor : OdinEditorWindow
         }
     }
     
+    /// <summary>
+    /// 左键增加，右键减少
+    /// </summary>
     private void ModifyTile(int x, int y, int mouseButton)
     {
         // 应用笔刷
@@ -257,11 +260,11 @@ public class MapEditor : OdinEditorWindow
                     
                     if (mouseButton == 0) // 左键：设置为笔刷值
                     {
-                        newCost = brushValue;
+                        newCost += brushValue;
                     }
                     else if (mouseButton == 1) // 右键：减少值
                     {
-                        newCost = Mathf.Max(0, currentCost - 1);
+                        newCost = Mathf.Max(0, currentCost - brushValue);
                     }
                     
                     currentMapData.SetCost(targetX, targetY, newCost);
@@ -287,8 +290,8 @@ public class MapEditor : OdinEditorWindow
                 );
                 
                 int cost = currentMapData.GetCost(x, y);
-                Color cellColor = GetCostColor(cost);
-                
+                //Color cellColor = GetCostColor(cost);
+                Color cellColor = Color.green;
                 // 绘制格子
                 EditorGUI.DrawRect(cellRect, cellColor);
                 
@@ -302,9 +305,13 @@ public class MapEditor : OdinEditorWindow
                 // 绘制数值
                 if (showValues && displaySize > 15)
                 {
-                    labelStyle.normal.textColor = GetContrastColor(cellColor);
-                    GUI.Label(cellRect, cost.ToString(), labelStyle);
+                    //labelStyle.normal.textColor = GetContrastColor(cellColor);
+                    
+                    //GUI.Label(cellRect, cost.ToString(), labelStyle);
                 }
+                
+                labelStyle.normal.textColor = Color.black;
+                GUI.Label(cellRect, cost.ToString(), labelStyle);
             }
         }
     }
