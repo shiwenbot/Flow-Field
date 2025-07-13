@@ -93,29 +93,10 @@ public class MapEditor : OdinEditorWindow
         
         if (currentMapData == null)
         {
-            DrawNoMapDataUI();
             return;
         }
         
         DrawMapEditor();
-    }
-    
-    private void DrawNoMapDataUI()
-    {
-        GUILayout.Space(20);
-        EditorGUILayout.HelpBox("请先创建或加载地图数据", MessageType.Info);
-        
-        GUILayout.Space(10);
-        if (GUILayout.Button("创建新地图", GUILayout.Height(30)))
-        {
-            CreateNewMapData();
-        }
-        
-        GUILayout.Space(10);
-        if (GUILayout.Button("加载现有地图", GUILayout.Height(30)))
-        {
-            LoadExistingMapData();
-        }
     }
     
     private void DrawMapEditor()
@@ -264,7 +245,7 @@ public class MapEditor : OdinEditorWindow
                     }
                     else if (mouseButton == 1) // 右键：减少值
                     {
-                        newCost = Mathf.Max(0, currentCost - brushValue);
+                        newCost = Mathf.Max(-1, currentCost - brushValue);
                     }
                     
                     currentMapData.SetCost(targetX, targetY, newCost);
@@ -290,8 +271,7 @@ public class MapEditor : OdinEditorWindow
                 );
                 
                 int cost = currentMapData.GetCost(x, y);
-                //Color cellColor = GetCostColor(cost);
-                Color cellColor = Color.green;
+                Color cellColor = cost >= 0 ? Color.green : Color.red;
                 // 绘制格子
                 EditorGUI.DrawRect(cellRect, cellColor);
                 
@@ -302,16 +282,9 @@ public class MapEditor : OdinEditorWindow
                     EditorGUI.DrawRect(new Rect(cellRect.x, cellRect.y, 1, cellRect.height), Color.gray);
                 }
                 
-                // 绘制数值
-                if (showValues && displaySize > 15)
-                {
-                    //labelStyle.normal.textColor = GetContrastColor(cellColor);
-                    
-                    //GUI.Label(cellRect, cost.ToString(), labelStyle);
-                }
-                
                 labelStyle.normal.textColor = Color.black;
-                GUI.Label(cellRect, cost.ToString(), labelStyle);
+                if(cost >= 0) GUI.Label(cellRect, cost.ToString(), labelStyle);
+                else GUI.Label(cellRect, "X", labelStyle);
             }
         }
     }

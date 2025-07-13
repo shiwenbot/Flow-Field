@@ -17,7 +17,7 @@ public class MapData : ScriptableObject
     public int height = 200;
     
     [Title("地图数据")]
-    [HideInInspector]
+    //[HideInInspector]
     public int[] costData;
     
     [Title("显示设置")]
@@ -57,6 +57,6 @@ public class MapData : ScriptableObject
     {
         if (x < 0 || x >= width || y < 0 || y >= height)
             return;
-        costData[y * width + x] = Mathf.Clamp(cost, 0, maxCost);
+        costData[y * width + x] = Mathf.Clamp(cost, -1, maxCost);
     }
 }
